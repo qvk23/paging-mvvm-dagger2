@@ -1,26 +1,24 @@
 package gst.trainingcourse.pagingimpl.repository
 
-import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import gst.trainingcourse.pagingimpl.NewsDataSourceFactory
-import gst.trainingcourse.pagingimpl.local.NewsDao
+import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import gst.trainingcourse.pagingimpl.NewsRemoteMediator
+import gst.trainingcourse.pagingimpl.local.AppDatabase
 import gst.trainingcourse.pagingimpl.local.model.Article
 import gst.trainingcourse.pagingimpl.remote.ApiService
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class NewsRepositoryImp @Inject constructor(
     private val newsApi: ApiService,
-    private val newsDao: NewsDao
+    private val database: AppDatabase
 ) : INewsRepository {
-    override fun getNews(scope: CoroutineScope): LiveData<PagedList<Article>> {
-        val sourceFactory = NewsDataSourceFactory(newsApi, newsDao, scope)
-        val config =
-            PagedList.Config.Builder()
-                .setInitialLoadSizeHint(100)
-                .setEnablePlaceholders(true)
-                .build()
-        return LivePagedListBuilder(sourceFactory, config).build()
-    }
+    override fun getNews(): Flow<PagingData<Article>> = Pager(
+        config = PagingConfig(30),
+        remoteMediator = NewsRemoteMediator(newsApi, database)
+    ) {
+        database.newsDao().getNews()
+    }.flow
 }

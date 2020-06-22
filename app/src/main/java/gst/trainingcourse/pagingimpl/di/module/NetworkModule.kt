@@ -2,7 +2,11 @@ package gst.trainingcourse.pagingimpl.di.module
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import gst.trainingcourse.pagingimpl.API_KEY
 import gst.trainingcourse.pagingimpl.BuildConfig
+import gst.trainingcourse.pagingimpl.MainApplication
 import gst.trainingcourse.pagingimpl.remote.ApiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
+@InstallIn(ApplicationComponent::class)
 class NetworkModule {
     @Singleton
     @Provides
@@ -38,7 +43,7 @@ class NetworkModule {
     private fun buildInterceptor(): Interceptor = Interceptor { chain ->
         val request = chain.request()
         val newUrl = request.url.newBuilder()
-            .addQueryParameter("apiKey", "60329517165c4b60ae7de66692d985cb")
+            .addQueryParameter("apiKey", API_KEY)
             .build()
         val newRequest = request.newBuilder()
             .url(newUrl)

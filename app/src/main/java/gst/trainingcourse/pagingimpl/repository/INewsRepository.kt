@@ -1,11 +1,9 @@
 package gst.trainingcourse.pagingimpl.repository
 
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
+import androidx.paging.PagingData
 import gst.trainingcourse.pagingimpl.local.model.Article
-import gst.trainingcourse.pagingimpl.remote.Result
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 
 interface INewsRepository {
-    fun getNews(scope: CoroutineScope): LiveData<PagedList<Article>>
+    fun getNews(): Flow<PagingData<Article>>
 }

@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import gst.trainingcourse.pagingimpl.local.model.Article
 import kotlinx.android.synthetic.main.item_news.view.*
 
-class NewsListAdapter : PagedListAdapter<Article, NewsListAdapter.NewsViewHolder>(newsDiffCallback) {
+class NewsListAdapter : PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(newsDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         return NewsViewHolder.create(parent)
